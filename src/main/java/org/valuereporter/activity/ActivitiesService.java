@@ -2,6 +2,7 @@ package org.valuereporter.activity;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,9 +40,28 @@ public class ActivitiesService {
                 for (String key : keys) {
                     columnNames.add(key);
                 }
-                updatedActivities = activitiesDao.insertActivities(tableName, columnNames, observedActivities);
+                try {
+                    updatedActivities = activitiesDao.insertActivities(tableName, columnNames, observedActivities);
+                } catch (DataAccessException de) {
+                    if (isMissingTablexeption(de)) {
+                        createTable(tableName, columnNames, observedActivities);
+                        updatedActivities = activitiesDao.insertActivities(tableName, columnNames, observedActivities);
+                    }
+                }
             }
         }
         return updatedActivities;
+    }
+
+    private void createTable(String tableName, ArrayList<String> columnNames, List<ObservedActivity> observedActivities) {
+        activitiesDao.createTable(tableName, columnNames, observedActivities.get(0));
+    }
+
+    private boolean isMissingTablexeption(DataAccessException de) {
+        boolean missingTable = false;
+        if (de.getCause()!= null) {
+            missingTable = de.getCause().getMessage().contains("object not found");
+        }
+        return missingTable;
     }
 }
