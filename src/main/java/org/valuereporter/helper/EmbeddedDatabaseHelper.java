@@ -5,6 +5,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valuereporter.ValuereporterException;
+import org.valuereporter.ValuereporterTechnicalException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -59,6 +60,13 @@ public class EmbeddedDatabaseHelper {
         if (useEmbeddedDb) {
             log.info("Creating new database at url {}", jdbcUrl);
             Connection connection = connectToHsqldb();
+            try {
+                if (connection == null || connection.isClosed()){
+                  throw  new ValuereporterTechnicalException("Failed to open database at URL " + jdbcUrl, StatusType.connection_error);
+                }
+            } catch (SQLException e) {
+                throw  new ValuereporterTechnicalException("Failed to open database at URL " + jdbcUrl, e,StatusType.connection_error);
+            }
             createUsers(connection);
             createTables(connection);
             insertValues(connection);
@@ -90,7 +98,7 @@ public class EmbeddedDatabaseHelper {
     public boolean isHSQLdbAvailable() {
         boolean isExistingDb = false;
         try {
-            String hsqldbUrl = jdbcUrl + ";ifexists=true";
+            String hsqldbUrl = jdbcUrl + ";ifexists=false";
             log.info("Try to connect to existing database with url {}", hsqldbUrl);
             DriverManager.getConnection(hsqldbUrl, jdbcUserName, jdbcPassword);
             isExistingDb = true;

@@ -28,14 +28,14 @@
     <logger name="org.eclipse.jetty" level="WARN"/>
     <logger name="org.apache.activemq" level="INFO"/>
     <logger name="org.apache.cxf" level="INFO"/>
-    <logger name="org.apache" level="WARN"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.jdbc" level="INFO"/>
+    <logger name="org.apache" level="trace"/>
+    <logger name="org.springframework" level="trace"/>
+    <logger name="org.springframework.jdbc" level="trace"/>
 
 
-    <logger name="org.valuereporter" level="INFO"/>
+    <logger name="org.valuereporter" level="trace"/>
     <logger name="org.springframework.web" level="INFO"/>
-    <root level="info">
+    <root level="trace">
         <appender-ref ref="logfile" />
         <appender-ref ref="STDOUT" />
         <!--<appender-ref ref="EMAIL" />-->
