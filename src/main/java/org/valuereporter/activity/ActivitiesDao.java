@@ -19,6 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Component
 public class ActivitiesDao {
     private static final Logger log = getLogger(ActivitiesDao.class);
+    public static final String START_TIME_COLUMN = "starttime";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -41,7 +42,8 @@ public class ActivitiesDao {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ObservedActivity activity = activities.get(i);
-                int paramNum = 1;
+                ps.setTimestamp(1,new java.sql.Timestamp(activity.getStartTime()));
+                int paramNum = 2;
                 for (String columnName : columnNames) {
                     ps.setObject(paramNum, activity.getValue(columnName));
                 }
@@ -66,12 +68,12 @@ public class ActivitiesDao {
 
     protected String buildSql(String tableName, List<String> columnNames) {
         String sql = "INSERT INTO " + tableName +
-                "(";
+                "(" + START_TIME_COLUMN +", ";
         for (String columnName : columnNames) {
             sql += columnName + ", ";
         }
         sql = sql.substring(0,sql.length() - 2);
-        sql += ") VALUES (";
+        sql += ") VALUES (?,";
         for (int i = 0; i < columnNames.size(); i++) {
             if (i < (columnNames.size() - 1)) {
                 sql += "?,";
