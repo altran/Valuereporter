@@ -35,6 +35,7 @@ public class ActivitiesResource {
         this.mapper = mapper;
     }
 
+    //Available at http://localhost:4901/reporter/observe/activities/{prefix}
     @POST
     @Path("/{prefix}")
     @Produces(MediaType.APPLICATION_JSON)

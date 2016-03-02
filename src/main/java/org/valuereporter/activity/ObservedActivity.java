@@ -55,4 +55,12 @@ public class ObservedActivity {
                 ", data=" + data +
                 '}';
     }
+
+    public Object getValue(String key) {
+        Object value = null;
+        if (data != null && data.containsKey(key)) {
+            value = data.get(key);
+        }
+        return value;
+    }
 }
