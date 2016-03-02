@@ -29,10 +29,12 @@ public class ActivitiesResource {
     private static final Logger log = getLogger(ActivitiesResource.class);
 
     private final ObjectMapper mapper;
+    private final ActivitiesService activitiesService;
 
     @Autowired
-    public ActivitiesResource(ObjectMapper mapper) {
+    public ActivitiesResource(ObjectMapper mapper, ActivitiesService activitiesService) {
         this.mapper = mapper;
+        this.activitiesService = activitiesService;
     }
 
     //Available at http://localhost:4901/reporter/observe/activities/{prefix}
@@ -54,7 +56,8 @@ public class ActivitiesResource {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Error converting to requested format.").build();
         }
 
-        long updatedCount = observedActivities.size(); //writeOperations.addObservations(prefix,observedMethods);
+//        long updatedCount = observedActivities.size(); //writeOperations.addObservations(prefix,observedMethods);
+        long updatedCount = activitiesService.updateActivities(prefix,observedActivities);
         String message =  "added " + updatedCount + " observedMethods.";
         Writer strWriter = new StringWriter();
         try {
