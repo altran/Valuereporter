@@ -30,7 +30,10 @@ public class EmbeddedDatabaseHelper {
     private static final String JDBC_ADMIN_USERNAME_KEY = "admin.connection.username";
     private static final String DEFAULT_JDBC_ADMIN_PASSWORD = "vrAdmin1234";
     private static final String JDBC_ADMIN_PASSWORD_KEY = "admin.connection.password";
+    private static final String DEFAULT_JDBC_DRIVER = "net.sourceforge.jtds.jdbc.Driver";
+    private static final String JDBC_DRIVER_NAME_KEY = "jdbc.driverClassName";
     private final QueryRunner queryRunner;
+    private final String jdbcDriverClassName;
     private final String jdbcUrl;
     private final String jdbcUserName;
     private final String jdbcPassword;
@@ -38,10 +41,12 @@ public class EmbeddedDatabaseHelper {
     private boolean useEmbeddedDb = true;
     private String jdbcAdminUserName;
 
+
     public EmbeddedDatabaseHelper(Properties resources) {
         queryRunner = new QueryRunner();
         useEmbeddedDb = useEmbeddedDb(resources);
         log.info("Using embedded database {}", useEmbeddedDb);
+        this.jdbcDriverClassName = resources.getProperty(JDBC_DRIVER_NAME_KEY, DEFAULT_JDBC_DRIVER);
         this.jdbcUrl = resources.getProperty(JDBC_URL_KEY, DEFAULT_JDBC_URL);
         this.jdbcUserName = resources.getProperty(JDBC_USERNAME_KEY, DEFAULT_JDBC_USERNAME);
         this.jdbcPassword = resources.getProperty(JDBC_PASSWORD_KEY, DEFAULT_JDBC_PASSWORD);
@@ -85,11 +90,17 @@ public class EmbeddedDatabaseHelper {
     }
 
     public Connection connectToHsqldb() {
+
         Connection c = null;
         try {
+           // log.warn("Using DriverManager {}
+            log.info("ConnectToHsqldb on url {}, using driver {}.", jdbcUrl,jdbcDriverClassName);
+            Class.forName(jdbcDriverClassName);
             c = DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
         } catch (SQLException e) {
-            log.info("Database is not available {}, user {}", jdbcUrl, jdbcUserName);
+            log.info("Database is not available {}, user {}, jdbcDriver {}, reason {}", jdbcUrl, jdbcUserName,jdbcDriverClassName, e);
+        } catch (ClassNotFoundException e) {
+            log.warn("Database could not be opened. Class for database driver {} could not be found.", jdbcDriverClassName);
         }
         return c;
 
