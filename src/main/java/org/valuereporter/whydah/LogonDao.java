@@ -28,7 +28,7 @@ public class LogonDao {
     }
 
     public List<Long> findLogonsByUserId(String userid){
-        String sql = "Select starttime from logon where userid=?";
+        String sql = "Select starttime from userlogon where userid=?";
         List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql,new Object[]{userid}, Timestamp.class);
         List<Long> logons = new ArrayList<>(logonsTimestamp.size());
         for (Timestamp timestamp : logonsTimestamp) {
