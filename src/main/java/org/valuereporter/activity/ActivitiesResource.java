@@ -41,10 +41,11 @@ public class ActivitiesResource {
     @Path("/{prefix}/logon/user/{userid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listLogon(@PathParam("userid") String userid) {
-        ArrayList<Long> logons = new ArrayList<>();
+        List<Long> logons = new ArrayList<>();
         logons.add(System.currentTimeMillis());
         logons.add(new DateTime().minusHours(1).getMillis());
         String logonlist = "";
+        logons = activitiesService.findLogonsByUserid(userid);
         try {
             logonlist = mapper.writeValueAsString(logons);
         } catch (JsonProcessingException e) {
