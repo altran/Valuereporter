@@ -1,5 +1,6 @@
 package org.valuereporter.activity;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -51,6 +53,7 @@ public class ActivitiesDao {
                     int paramNum = 2;
                     for (String columnName : columnNames) {
                         ps.setObject(paramNum, activity.getValue(columnName));
+                        paramNum ++;
                     }
 //                ps.setObject(1, activity.getValue(columnNames.get(0)));
 //                ps.setLong(1, customer.getCustId());
@@ -74,6 +77,14 @@ public class ActivitiesDao {
         }
         log.trace("Updated {} to table {}", sum, tableName);
         return sum;
+    }
+
+    public List<ObservedActivity> findUserSessions(DateTime startPeriod, DateTime endPeriod) {
+        String sql = "Select * from usersession where starttime > ? and starttime < ?";
+        long millisFrom = startPeriod.minusMillis(1).getMillis() ;
+        long millisTo = endPeriod.plusMillis(1).getMillis() ;
+        List<ObservedActivity> userSessions = jdbcTemplate.query(sql, new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, new UserSessionMapper());
+        return userSessions;
     }
 
     protected String buildSql(String tableName, List<String> columnNames) {
@@ -117,4 +128,6 @@ public class ActivitiesDao {
         }
         jdbcTemplate.execute(tableSql);
     }
+
+
 }

@@ -54,7 +54,7 @@ public class ActivitiesService {
         return updatedActivities;
     }
 
-    private long updateActivitiesByName(List<ObservedActivity> observedActivities) {
+    protected long updateActivitiesByName(List<ObservedActivity> observedActivities) {
         long updatedActivities = 0;
         ObservedActivity activity = observedActivities.get(0);
         String tableName = activity.getName();

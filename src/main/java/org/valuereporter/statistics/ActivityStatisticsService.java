@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.valuereporter.activity.ActivitiesDao;
+import org.valuereporter.activity.ObservedActivity;
 import org.valuereporter.whydah.LogonDao;
 
 import java.util.List;
@@ -44,8 +45,27 @@ public class ActivityStatisticsService {
 
 
         List<Long> logons = logonDao.findLogons(startPeriod,endPeriod);
-        ActivityStatistics activityStatistics = new ActivityStatistics("All","userlogons", startPeriod.getMillis(), endPeriod.getMillis());
+        ActivityStatistics activityStatistics = new ActivityStatistics("All","userlogon", startPeriod.getMillis(), endPeriod.getMillis());
         activityStatistics.add("userlogons", logons);
+        return activityStatistics;
+    }
+
+    public ActivityStatistics findUserSessions(Long startTime, Long endTime) {
+        DateTime startPeriod = null;
+        DateTime endPeriod = null;
+        if (endTime == null) {
+            endPeriod = new DateTime();
+        } else {
+            endPeriod = new DateTime(endTime);
+        }
+        if (startTime == null) {
+            startPeriod = endPeriod.minusDays(1);
+        } else {
+            startPeriod = new DateTime(startTime);
+        }
+        List<ObservedActivity> userSessions = activitiesDao.findUserSessions(startPeriod, endPeriod);
+        ActivityStatistics activityStatistics = new ActivityStatistics("All","userSession", startPeriod.getMillis(), endPeriod.getMillis());
+        activityStatistics.add("userSessions", userSessions);
         return activityStatistics;
     }
 }

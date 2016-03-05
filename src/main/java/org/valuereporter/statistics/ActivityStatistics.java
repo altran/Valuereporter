@@ -1,7 +1,6 @@
 package org.valuereporter.statistics;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,11 +57,11 @@ public class ActivityStatistics {
         this.endTime = endTime;
     }
 
-    public void add(String userlogons, List<Long> logons) {
+    public void add(String key, Object values) {
         if (activities == null){
             activities = new HashMap<String,Object>();
         }
-        activities.put(userlogons,logons);
+        activities.put(key,values);
     }
 
     public Map<String, Object> getActivities() {

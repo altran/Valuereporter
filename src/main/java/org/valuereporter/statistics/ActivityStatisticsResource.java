@@ -36,8 +36,19 @@ public class ActivityStatisticsResource {
     public Response listLogon(@PathParam("prefix") String prefix,@PathParam("activityName") String activityName, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime) {
 
         ActivityStatistics activityStatistics = null;
-        if (activityName != null && activityName.equalsIgnoreCase("userlogon"))
-       activityStatistics = statisticsService.findUserLogons(startTime, endTime);
+        if (activityName != null) {
+            switch (activityName.toLowerCase()) {
+                case "userlogon":
+                    activityStatistics = statisticsService.findUserLogons(startTime, endTime);
+                    break;
+                case "usersession":
+                    activityStatistics = statisticsService.findUserSessions(startTime, endTime);
+                    break;
+                default:
+                    activityStatistics = new ActivityStatistics(activityName);
+            }
+
+        }
         String resultJson = "";
         try {
             resultJson = mapper.writeValueAsString(activityStatistics);
