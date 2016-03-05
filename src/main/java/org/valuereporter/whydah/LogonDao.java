@@ -1,5 +1,6 @@
 package org.valuereporter.whydah;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,6 +31,18 @@ public class LogonDao {
     public List<Long> findLogonsByUserId(String userid){
         String sql = "Select starttime from userlogon where userid=?";
         List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql,new Object[]{userid}, Timestamp.class);
+        List<Long> logons = new ArrayList<>(logonsTimestamp.size());
+        for (Timestamp timestamp : logonsTimestamp) {
+            logons.add(timestamp.getTime());
+        }
+        return logons;
+    }
+
+    public List<Long> findLogons(DateTime startPeriod, DateTime endPeriod) {
+        String sql = "Select starttime from userlogon where starttime > ? and starttime < ?";
+        long millisFrom = startPeriod.minusMillis(1).getMillis() ;
+        long millisTo = endPeriod.plusMillis(1).getMillis() ;
+        List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql,new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, Timestamp.class);
         List<Long> logons = new ArrayList<>(logonsTimestamp.size());
         for (Timestamp timestamp : logonsTimestamp) {
             logons.add(timestamp.getTime());
