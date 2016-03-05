@@ -30,9 +30,9 @@
     </parent>
 
     <scm>
-        <developerConnection>scm:git:ssh://git@github.com/altran/Valuereporter.git</developerConnection>
-        <connection>scm:git:https://github.com/altran/Valuereporter.git</connection>
-        <url>https://github.com/altran/Valuereporter</url>
+        <developerConnection>scm:git:ssh://git@github.com/cantara/Valuereporter.git</developerConnection>
+        <connection>scm:git:https://github.com/cantara/Valuereporter.git</connection>
+        <url>https://github.com/cantara/Valuereporter</url>
       <tag>HEAD</tag>
   </scm>
 
