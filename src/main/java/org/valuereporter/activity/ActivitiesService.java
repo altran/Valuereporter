@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.valuereporter.whydah.LogonDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ public class ActivitiesService {
     private static final Logger log = getLogger(ActivitiesService.class);
 
     private final ActivitiesDao activitiesDao;
+    private final LogonDao logonDao;
 
     @Autowired
-    public ActivitiesService(ActivitiesDao activitiesDao) {
+    public ActivitiesService(ActivitiesDao activitiesDao, LogonDao logonDao) {
         this.activitiesDao = activitiesDao;
+        this.logonDao = logonDao;
     }
 
     public long updateActivities(String prefix, List<ObservedActivity> observedActivities) {
@@ -55,6 +58,10 @@ public class ActivitiesService {
 
     private void createTable(String tableName, ArrayList<String> columnNames, List<ObservedActivity> observedActivities) {
         activitiesDao.createTable(tableName, columnNames, observedActivities.get(0));
+    }
+
+    public List<Long> findLogonsByUserid(String userid) {
+        return logonDao.findLogonsByUserId(userid);
     }
 
     private boolean isMissingTablexeption(DataAccessException de) {

@@ -1,15 +1,14 @@
 package org.valuereporter.activity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -37,6 +36,23 @@ public class ActivitiesResource {
         this.activitiesService = activitiesService;
     }
 
+    //Available at http://localhost:4901/reporter/observe/activities/{prefix}/logon/user/{userid}
+    @GET
+    @Path("/{prefix}/logon/user/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listLogon(@PathParam("userid") String userid) {
+        ArrayList<Long> logons = new ArrayList<>();
+        logons.add(System.currentTimeMillis());
+        logons.add(new DateTime().minusHours(1).getMillis());
+        String logonlist = "";
+        try {
+            logonlist = mapper.writeValueAsString(logons);
+        } catch (JsonProcessingException e) {
+            log.trace("Failed to bulild json from {}. Reason {}", logons, e.getMessage());
+        }
+        return Response.ok(logonlist).build();
+
+    }
     //Available at http://localhost:4901/reporter/observe/activities/{prefix}
     @POST
     @Path("/{prefix}")
