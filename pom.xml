@@ -91,7 +91,22 @@
         </resources>
         <finalName>value-reporter</finalName>
         <plugins>
-            <!--
+           <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>2.9</version>
+               <executions>
+                  <execution>
+                    <id>attach-javadocs</id>
+                      <goals>
+                        <goal>jar</goal>
+                      </goals>
+                      <configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                      </configuration>
+                   </execution>
+                 </executions>
+               </plugin>            <!--
             http://confluence.highsource.org/display/~lexi/How+to+run+both+JUnit+and+TestNG+with+maven-surefire-plugin
             -->
             <plugin>
