@@ -42,7 +42,7 @@ public class EmbeddedDatabaseHelper {
     private String jdbcAdminUserName;
 
 
-    public EmbeddedDatabaseHelper(Properties resources) {
+    public EmbeddedDatabaseHelper(Properties resources) throws ClassNotFoundException {
         queryRunner = new QueryRunner();
         useEmbeddedDb = useEmbeddedDb(resources);
         log.info("Using embedded database {}", useEmbeddedDb);
@@ -52,6 +52,13 @@ public class EmbeddedDatabaseHelper {
         this.jdbcPassword = resources.getProperty(JDBC_PASSWORD_KEY, DEFAULT_JDBC_PASSWORD);
         this.jdbcAdminUserName = resources.getProperty(JDBC_ADMIN_USERNAME_KEY, DEFAULT_JDBC_ADMIN_USERNAME);
         this.jdbcAdminPassword = resources.getProperty(JDBC_ADMIN_PASSWORD_KEY, DEFAULT_JDBC_ADMIN_PASSWORD);
+
+        try {
+            Class.forName(jdbcDriverClassName);
+        } catch (ClassNotFoundException e) {
+            log.warn("Database could not be opened. Class for database driver {} could not be found.", jdbcDriverClassName);
+            throw e;
+        }
 
     }
 
@@ -95,12 +102,10 @@ public class EmbeddedDatabaseHelper {
         try {
            // log.warn("Using DriverManager {}
             log.info("ConnectToHsqldb on url {}, using driver {}.", jdbcUrl,jdbcDriverClassName);
-            Class.forName(jdbcDriverClassName);
+//            Class.forName(jdbcDriverClassName);
             c = DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
         } catch (SQLException e) {
             log.info("Database is not available {}, user {}, jdbcDriver {}, reason {}", jdbcUrl, jdbcUserName,jdbcDriverClassName, e);
-        } catch (ClassNotFoundException e) {
-            log.warn("Database could not be opened. Class for database driver {} could not be found.", jdbcDriverClassName);
         }
         return c;
 
