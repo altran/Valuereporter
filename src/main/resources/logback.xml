@@ -1,5 +1,5 @@
 <configuration scan="true" scanPeriod="60 seconds">
-    <property name="LOG_DIR" value="../valuereporter_logs/" />
+    <property name="LOG_DIR" value="logs/" />
     <property name="env" value="valuereporter-noEnvSet" />
     <property name="appName" value="valuereporter" />
     <!--<property name="AUDIT_LOG_DIR" value="logs/audit" />-->
@@ -11,9 +11,9 @@
     </appender>
 
     <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/valuereporter.log</file>
+        <file>${LOG_DIR}/Valuereporter.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/valuereporter-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/Valuereporter-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
