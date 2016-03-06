@@ -130,7 +130,7 @@ public class ActivitiesDao {
 //                "      prefix varchar(255) NOT NULL,\n" +
                     "      starttime TIMESTAMP  NOT NULL,\n" +
                     "      userid varchar(255)  NOT NULL,\n" +
-                    "      usersessionfunction varchar(255) \n" +
+                    "      usersessionfunction varchar(255), \n" +
                     "      applicationtokenid varchar(255)  NOT NULL,\n" +
                     "      applicationid varchar(255)  NOT NULL,\n" +
                     "    );";
