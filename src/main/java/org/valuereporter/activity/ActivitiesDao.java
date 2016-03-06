@@ -88,7 +88,7 @@ public class ActivitiesDao {
     }
 
     public List<ObservedActivity> findUserSessionsByUserid(String userid, DateTime startPeriod, DateTime endPeriod) {
-        String sql = "Select * from usersession where userid=? starttime > ? and starttime < ?";
+        String sql = "Select * from usersession where userid=? and starttime > ? and starttime < ?";
         long millisFrom = startPeriod.minusMillis(1).getMillis() ;
         long millisTo = endPeriod.plusMillis(1).getMillis() ;
         List<ObservedActivity> userSessions = jdbcTemplate.query(sql, new Object[]{userid, new Timestamp(millisFrom), new Timestamp(millisTo)}, new UserSessionMapper());
