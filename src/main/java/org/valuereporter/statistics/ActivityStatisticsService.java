@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.valuereporter.activity.ActivitiesDao;
 import org.valuereporter.activity.ObservedActivity;
 import org.valuereporter.whydah.LogonDao;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -31,13 +30,20 @@ public class ActivityStatisticsService {
 
 
     public ActivityStatistics findUserLogons(Long startTime, Long endTime) {
-        DateTime startPeriod = null;
-        DateTime endPeriod = null;
-        endPeriod = buildEndPeriod(endTime);
-        startPeriod = buildStartPeriod(startTime, endPeriod);
-
+        DateTime endPeriod = buildEndPeriod(endTime);
+        DateTime startPeriod = buildStartPeriod(startTime, endPeriod);
 
         List<Long> logons = logonDao.findLogons(startPeriod,endPeriod);
+        ActivityStatistics activityStatistics = new ActivityStatistics("All","userlogon", startPeriod.getMillis(), endPeriod.getMillis());
+        activityStatistics.add("userlogons", logons);
+        return activityStatistics;
+    }
+
+    public ActivityStatistics findUserLogonsByUserid(String userid, Long startTime, Long endTime) {
+        DateTime endPeriod = buildEndPeriod(endTime);
+        DateTime startPeriod = buildStartPeriod(startTime, endPeriod);
+
+        List<Long> logons = logonDao.findLogonsByUserId(userid,startPeriod,endPeriod);
         ActivityStatistics activityStatistics = new ActivityStatistics("All","userlogon", startPeriod.getMillis(), endPeriod.getMillis());
         activityStatistics.add("userlogons", logons);
         return activityStatistics;
@@ -71,14 +77,6 @@ public class ActivityStatisticsService {
         }
         return endPeriod;
     }
-
-
-    public ActivityStatistics findUserLogonsByUserid(String userid, Long startTime, Long endTime) {
-        //TODO Not implemented yet
-        throw new NotImplementedException();
-//        return null;
-    }
-
     public ActivityStatistics findUserSessionsByUserid(String userid, Long startTime, Long endTime) {
         DateTime endPeriod = buildEndPeriod(endTime);
         DateTime startPeriod = buildStartPeriod(startTime, endPeriod);

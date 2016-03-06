@@ -38,6 +38,18 @@ public class LogonDao {
         return logons;
     }
 
+    public List<Long> findLogonsByUserId(String userid, DateTime startPeriod, DateTime endPeriod){
+        String sql = "Select starttime from userlogon where userid=? and starttime > ? and starttime < ?";
+        long millisFrom = startPeriod.minusMillis(1).getMillis() ;
+        long millisTo = endPeriod.plusMillis(1).getMillis();
+        List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql,new Object[]{userid,new Timestamp(millisFrom), new Timestamp(millisTo)}, Timestamp.class);
+        List<Long> logons = new ArrayList<>(logonsTimestamp.size());
+        for (Timestamp timestamp : logonsTimestamp) {
+            logons.add(timestamp.getTime());
+        }
+        return logons;
+    }
+
     public List<Long> findLogons(DateTime startPeriod, DateTime endPeriod) {
         String sql = "Select starttime from userlogon where starttime > ? and starttime < ?";
         long millisFrom = startPeriod.minusMillis(1).getMillis() ;
