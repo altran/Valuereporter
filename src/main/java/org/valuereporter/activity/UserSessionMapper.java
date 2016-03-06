@@ -18,10 +18,12 @@ public class UserSessionMapper implements RowMapper {
 
         Timestamp startTime = resultSet.getTimestamp("starttime");
         String userid = resultSet.getString("userid");
+        String usersessionfunction = resultSet.getString("usersessionfunction");
         String applicationtokenid = resultSet.getString("applicationtokenid");
         String applicationid = resultSet.getString("applicationid");
         Map<String, Object> data = new HashMap<>();
         data.put("userid",userid);
+        data.put("usersessionfunction",usersessionfunction);
         data.put("applicationtokenid",applicationtokenid);
         data.put("applicationid", applicationid);
 
