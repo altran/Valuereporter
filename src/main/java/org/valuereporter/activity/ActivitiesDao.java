@@ -87,6 +87,14 @@ public class ActivitiesDao {
         return userSessions;
     }
 
+    public List<ObservedActivity> findUserSessionsByUserid(String userid, DateTime startPeriod, DateTime endPeriod) {
+        String sql = "Select * from usersession where userid=? starttime > ? and starttime < ?";
+        long millisFrom = startPeriod.minusMillis(1).getMillis() ;
+        long millisTo = endPeriod.plusMillis(1).getMillis() ;
+        List<ObservedActivity> userSessions = jdbcTemplate.query(sql, new Object[]{userid, new Timestamp(millisFrom), new Timestamp(millisTo)}, new UserSessionMapper());
+        return userSessions;
+    }
+
     protected String buildSql(String tableName, List<String> columnNames) {
         String sql = "INSERT INTO " + tableName +
                 "(" + START_TIME_COLUMN +", ";
@@ -128,6 +136,4 @@ public class ActivitiesDao {
         }
         jdbcTemplate.execute(tableSql);
     }
-
-
 }

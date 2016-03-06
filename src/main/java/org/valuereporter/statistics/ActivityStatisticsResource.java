@@ -59,4 +59,35 @@ public class ActivityStatisticsResource {
 
     }
 
+    @GET
+    @Path("/{activityName}/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listLogon(@PathParam("prefix") String prefix,@PathParam("activityName") String activityName,
+                              @PathParam("userid") String userid,
+                              @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime) {
+
+        ActivityStatistics activityStatistics = null;
+        if (activityName != null) {
+            switch (activityName.toLowerCase()) {
+                case "userlogon":
+                    activityStatistics = statisticsService.findUserLogonsByUserid(userid,startTime, endTime);
+                    break;
+                case "usersession":
+                    activityStatistics = statisticsService.findUserSessionsByUserid(userid,startTime, endTime);
+                    break;
+                default:
+                    activityStatistics = new ActivityStatistics(activityName);
+            }
+
+        }
+        String resultJson = "";
+        try {
+            resultJson = mapper.writeValueAsString(activityStatistics);
+        } catch (JsonProcessingException e) {
+            log.trace("Failed to bulild json from {}. Reason {}", activityStatistics, e.getMessage());
+        }
+        return Response.ok(resultJson).build();
+
+    }
+
 }

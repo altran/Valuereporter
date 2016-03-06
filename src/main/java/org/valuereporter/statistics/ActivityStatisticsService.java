@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.valuereporter.activity.ActivitiesDao;
 import org.valuereporter.activity.ObservedActivity;
 import org.valuereporter.whydah.LogonDao;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -32,16 +33,8 @@ public class ActivityStatisticsService {
     public ActivityStatistics findUserLogons(Long startTime, Long endTime) {
         DateTime startPeriod = null;
         DateTime endPeriod = null;
-        if (endTime == null) {
-            endPeriod = new DateTime();
-        } else {
-            endPeriod = new DateTime(endTime);
-        }
-        if (startTime == null) {
-            startPeriod = endPeriod.minusDays(1);
-        } else {
-            startPeriod = new DateTime(startTime);
-        }
+        endPeriod = buildEndPeriod(endTime);
+        startPeriod = buildStartPeriod(startTime, endPeriod);
 
 
         List<Long> logons = logonDao.findLogons(startPeriod,endPeriod);
@@ -50,20 +43,46 @@ public class ActivityStatisticsService {
         return activityStatistics;
     }
 
-    public ActivityStatistics findUserSessions(Long startTime, Long endTime) {
-        DateTime startPeriod = null;
-        DateTime endPeriod = null;
-        if (endTime == null) {
-            endPeriod = new DateTime();
-        } else {
-            endPeriod = new DateTime(endTime);
-        }
+    private DateTime buildStartPeriod(Long startTime, DateTime endPeriod) {
+        DateTime startPeriod;
         if (startTime == null) {
             startPeriod = endPeriod.minusDays(1);
         } else {
             startPeriod = new DateTime(startTime);
         }
+        return startPeriod;
+    }
+
+    public ActivityStatistics findUserSessions(Long startTime, Long endTime) {
+        DateTime endPeriod = buildEndPeriod(endTime);
+        DateTime startPeriod = buildStartPeriod(startTime, endPeriod);
         List<ObservedActivity> userSessions = activitiesDao.findUserSessions(startPeriod, endPeriod);
+        ActivityStatistics activityStatistics = new ActivityStatistics("All","userSession", startPeriod.getMillis(), endPeriod.getMillis());
+        activityStatistics.add("userSessions", userSessions);
+        return activityStatistics;
+    }
+
+    private DateTime buildEndPeriod(Long endTime) {
+        DateTime endPeriod;
+        if (endTime == null) {
+            endPeriod = new DateTime();
+        } else {
+            endPeriod = new DateTime(endTime);
+        }
+        return endPeriod;
+    }
+
+
+    public ActivityStatistics findUserLogonsByUserid(String userid, Long startTime, Long endTime) {
+        //TODO Not implemented yet
+        throw new NotImplementedException();
+//        return null;
+    }
+
+    public ActivityStatistics findUserSessionsByUserid(String userid, Long startTime, Long endTime) {
+        DateTime endPeriod = buildEndPeriod(endTime);
+        DateTime startPeriod = buildStartPeriod(startTime, endPeriod);
+        List<ObservedActivity> userSessions = activitiesDao.findUserSessionsByUserid(userid,startPeriod, endPeriod);
         ActivityStatistics activityStatistics = new ActivityStatistics("All","userSession", startPeriod.getMillis(), endPeriod.getMillis());
         activityStatistics.add("userSessions", userSessions);
         return activityStatistics;
