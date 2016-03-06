@@ -134,6 +134,7 @@ public class ActivitiesDao {
                     "      applicationtokenid varchar(255)  NOT NULL,\n" +
                     "      applicationid varchar(255)  NOT NULL,\n" +
                     "    );";
+            jdbcTemplate.execute("DROP TABLE usersession;");
         }
         jdbcTemplate.execute(tableSql);
     }
