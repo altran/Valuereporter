@@ -34,27 +34,34 @@
                 data: []
             },
             {
-                name: 'Mean',
+                name: 'Created',
                 data: []
             },
             {
-                name: '95 percentile',
+                name: 'Verification',
                 data: [],
                 visible: false
             }, {
-                name: 'Max',
+                name: 'Access',
                 data: [],
                 visible: false
         }];
         var userlogons = data.activities.userSessions;
-        userlogons.forEach(function(usersession){
+        var userSessionFunction = "";
+        userlogons.forEach(function(usersession) {
 //        data.forEach(function(interval){
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
-            //usersession.data.usersessionfunction=null
-            series[0].data.push([usersession.startTime,1]);
-//            series[1].data.push([interval.startTime,interval.mean]);
-//            series[2].data.push([interval.startTime,interval.p95]);
-//            series[3].data.push([interval.startTime,interval.max]);
+
+            series[0].data.push([usersession.startTime, 1]);
+            if (userSessionFunction == "userSessionCreated") {
+                series[1].data.push([usersession.startTime, 1]);
+            }
+            if (userSessionFunction == "userSessionVerification") {
+                series[2].data.push([usersession.startTime, 1]);
+            }
+            if (userSessionFunction == "userSessionAccess") {
+                series[3].data.push([usersession.startTime, 1]);
+            }
         });
 
         $('#chart2').highcharts({
