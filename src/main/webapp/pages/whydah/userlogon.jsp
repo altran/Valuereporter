@@ -9,10 +9,10 @@
 <h4>${message}</h4>
 <div id="chart2" style="height:500px; width:800px;"></div>
 
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="//code.jquery.com/jquery.js"></script>
 <!--<script src="${pageContext.request.contextPath}/js/jquery-1.8.2.min.js"></script>  -->
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//code.highcharts.com/highcharts.js"></script>
+<script src="//code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     //Expected output
     //{"prefix":"All","activityName":"userlogon","startTime":1457332861892,"endTime":1457419261892,"activities":{"userlogons":[1457419114782,1457419114782]}}
