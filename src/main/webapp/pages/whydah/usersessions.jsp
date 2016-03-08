@@ -52,6 +52,7 @@
 //        data.forEach(function(interval){
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
 
+            userSessionFunction = usersession.data.usersessionfunction;
             series[0].data.push([usersession.startTime, 1]);
             if (userSessionFunction == "userSessionCreated") {
                 series[1].data.push([usersession.startTime, 1]);
@@ -63,6 +64,8 @@
                 series[3].data.push([usersession.startTime, 1]);
             }
         });
+
+//        message ="hi";
 
         $('#chart2').highcharts({
             chart: {
