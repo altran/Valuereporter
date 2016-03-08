@@ -30,14 +30,7 @@ public class WhdyahGuiController {
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
         return new ModelAndView("sla", "model", model);
     }
-    @RequestMapping("/whydah/slahc")
-    public ModelAndView showSlaGraphHighChart(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
-        Map model = new HashMap<String,String>();
-        model.put(PREFIX, prefix);
-        model.put(METHOD_NAME, methodName);
-        log.trace("Input prefix {}, methodName {}", prefix,methodName);
-        return new ModelAndView("slahc", "model", model);
-    }
+
 
     @RequestMapping("/whydah/usersession")
     public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName,

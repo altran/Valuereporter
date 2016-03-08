@@ -14,9 +14,8 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
-    // Expected output
-    //{"prefix":"All","activityName":"userSession","startTime":1457332781744,"endTime":1457419181744,"activities":{"userSessions":[{"prefix":"","name":"userSession","startTime":1457419114782,"data":{"usersessionfunction":null,"applicationid":"app1","userid":"me","applicationtokenid":"token1"}},{"prefix":"","name":"userSession","startTime":1457419114782,"data":{"usersessionfunction":null,"applicationid":"app2","userid":"me","applicationtokenid":"token2"}}]}}
-    //-->
+    //Expected output
+    //{"prefix":"All","activityName":"userlogon","startTime":1457332861892,"endTime":1457419261892,"activities":{"userlogons":[1457419114782,1457419114782]}}
     Highcharts.setOptions({
         global: {
             useUTC: false
