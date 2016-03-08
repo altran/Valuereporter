@@ -59,7 +59,7 @@
 
         $('#chart2').highcharts({
             chart: {
-                type: 'spline',
+                type: 'scatter',
                 zoomType: 'x'
             },
             credits: {
