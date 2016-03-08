@@ -28,7 +28,7 @@ public class WhdyahGuiController {
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
-        return new ModelAndView("sla", "model", model);
+        return new ModelAndView("whydah/userlogon", "model", model);
     }
 
 

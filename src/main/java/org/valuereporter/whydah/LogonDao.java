@@ -3,6 +3,7 @@ package org.valuereporter.whydah;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -54,10 +55,15 @@ public class LogonDao {
         String sql = "Select starttime from userlogon where starttime > ? and starttime < ?";
         long millisFrom = startPeriod.minusMillis(1).getMillis() ;
         long millisTo = endPeriod.plusMillis(1).getMillis() ;
-        List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql,new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, Timestamp.class);
-        List<Long> logons = new ArrayList<>(logonsTimestamp.size());
-        for (Timestamp timestamp : logonsTimestamp) {
-            logons.add(timestamp.getTime());
+        List<Long> logons = new ArrayList<>();
+        try {
+            List<Timestamp> logonsTimestamp = jdbcTemplate.queryForList(sql, new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, Timestamp.class);
+            logons = new ArrayList<>(logonsTimestamp.size());
+            for (Timestamp timestamp : logonsTimestamp) {
+                logons.add(timestamp.getTime());
+            }
+        } catch (BadSqlGrammarException e) {
+            log.info("Failed to query the database for Sql {} Reason: {}", sql, e.getMessage());
         }
         return logons;
     }
