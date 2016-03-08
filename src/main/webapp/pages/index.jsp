@@ -17,7 +17,7 @@
 
     <h3>Observations</h3>
     <li><a href="./gui/observations?prefix=dummy-load">List usage-count pr method.</a> </li>
-    <li><a href="./gui/slainterval?prefix=dummy-load&methodName=org.dummy.load.LoadThread.performVisibleLoad">Graph of Count/time for a method and prefix.</a> </li>
+    <li><a href="./gui/slainterval?prefix=initial&methodName=com.valuereporter.test">Graph of Count/time for a method and prefix.</a> </li>
 
     <h3>InUse - which methods are actually being used</h3>
     <li><a href="./gui/inuse?prefix=dummy-load">Show methods implemented vs. in use.</a> </li>

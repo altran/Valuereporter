@@ -114,7 +114,7 @@ public class EmbeddedDatabaseHelper {
     public boolean isHSQLdbAvailable() {
         boolean isExistingDb = false;
         try {
-            String hsqldbUrl = jdbcUrl + ";ifexists=false";
+            String hsqldbUrl = jdbcUrl + ";ifexists=true";
             log.info("Try to connect to existing database with url {}", hsqldbUrl);
             DriverManager.getConnection(hsqldbUrl, jdbcUserName, jdbcPassword);
             isExistingDb = true;
@@ -207,7 +207,7 @@ public class EmbeddedDatabaseHelper {
             queryRunner.update(connection, "insert into ImplementedMethod (prefix,methodName) values ('inital', 'com.valuereporter.test');");
             queryRunner.update(connection, "insert into ObservedKeys(prefix, methodName) values ('initial', 'com.valuereporter.test');");
             queryRunner.update(connection, "insert into ObservedInterval (observedKeysId, startTime, duration, vrCount, vrMax, vrMean,vrMin,vrMedian, stdDev)\n" +
-                "      select o.id, '2014-05-13 12:02:43.296', 15*60*1000, 4, 50, 5.0, 2,0,0\n" +
+                "      select o.id, '2016-03-07 12:02:43.296', 15*60*1000, 4, 50, 5.0, 2,0,0\n" +
                 "      from ObservedKeys o\n" +
                 "      where prefix='initial' and methodName = 'com.valuereporter.test';");
         } catch (SQLException e) {
