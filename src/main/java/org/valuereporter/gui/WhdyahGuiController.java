@@ -23,10 +23,14 @@ public class WhdyahGuiController {
     public static final String TO = "to";
 
     @RequestMapping("/whydah/userlogon")
-    public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
+    public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = false) String prefix, @RequestParam(value = METHOD_NAME, required = false) String methodName) {
         Map model = new HashMap<String,String>();
+        if (prefix == null || prefix.isEmpty()) {
+            prefix = "all";
+        }
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
+        model.put("username", "All");
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
         return new ModelAndView("whydah/userlogon", "model", model);
     }

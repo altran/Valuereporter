@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-    <title>Whydah usersessions</title>
+    <title>Whydah User Logons</title>
 
 </head>
 <body>
-<h2>Whydah Usersessions for  ${model.username}</h2>
+<h2>Whydah User Logons for  ${model.username}</h2>
 <h4>${message}</h4>
 <div id="chart2" style="height:500px; width:800px;"></div>
 
