@@ -37,9 +37,12 @@ public class WhdyahGuiController {
 
 
     @RequestMapping("/whydah/usersession")
-    public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName,
+    public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = false) String prefix, @RequestParam(value = METHOD_NAME, required = false) String methodName,
                                              @RequestParam(value = FROM, required = false) Long from, @RequestParam(value = TO, required = false) String to) {
         Map model = new HashMap<String,String>();
+        if (prefix == null || prefix.isEmpty()) {
+            prefix = "all";
+        }
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
         model.put("username", "All");

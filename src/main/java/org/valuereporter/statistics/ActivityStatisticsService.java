@@ -8,7 +8,9 @@ import org.valuereporter.activity.ActivitiesDao;
 import org.valuereporter.activity.ObservedActivity;
 import org.valuereporter.whydah.LogonDao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -77,6 +79,17 @@ public class ActivityStatisticsService {
         DateTime startPeriod = buildStartPeriod(startTime, endPeriod);
         List<ObservedActivity> userSessions = activitiesDao.findUserSessions(startPeriod, endPeriod);
         ActivityStatistics activityStatistics = new ActivityStatistics("All","userSession", startPeriod.getMillis(), endPeriod.getMillis());
+        if (allowStubData) {
+            if (userSessions == null || userSessions.size() == 0) {
+                Map data = new HashMap<>();
+                data.put("usersessionfunction",null);
+                data.put("applicationid","app1");
+                data.put("userid","me");
+                data.put("applicationtokenid","token1");
+                ObservedActivity stubbedSession = new ObservedActivity("userSession",System.currentTimeMillis(), data);
+                userSessions.add(stubbedSession);
+            }
+        }
         activityStatistics.add("userSessions", userSessions);
         return activityStatistics;
     }

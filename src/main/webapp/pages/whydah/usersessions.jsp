@@ -9,10 +9,10 @@
 <h4>${message}</h4>
 <div id="chart2" style="height:500px; width:800px;"></div>
 
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="//code.jquery.com/jquery.js"></script>
 <!--<script src="${pageContext.request.contextPath}/js/jquery-1.8.2.min.js"></script>  -->
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//code.highcharts.com/highcharts.js"></script>
+<script src="//code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     // Expected output
     //{"prefix":"All","activityName":"userSession","startTime":1457332781744,"endTime":1457419181744,"activities":{"userSessions":[{"prefix":"","name":"userSession","startTime":1457419114782,"data":{"usersessionfunction":null,"applicationid":"app1","userid":"me","applicationtokenid":"token1"}},{"prefix":"","name":"userSession","startTime":1457419114782,"data":{"usersessionfunction":null,"applicationid":"app2","userid":"me","applicationtokenid":"token2"}}]}}
@@ -23,14 +23,14 @@
         }
     });
     var chart;
-    $.getJSON('/reporter/observe/sla/interval/${model.prefix}?filter=${model.methodName}&from=${model.from}&to=${model.to}', function(data) {
-        var methodNames = '${model.methodName}'.split(".");
-        var niceNum=methodNames.length-2;
-        var graphTitle=methodNames[niceNum] + '.' + methodNames[niceNum+1];
+    $.getJSON('/reporter/observe/statistics/${model.prefix}/usersession?startTime=${model.from}&endTime=${model.to}', function(data) {
+        <%--var methodNames = '${model.methodName}'.split(".");--%>
+//        var niceNum=methodNames.length-2;
+        var graphTitle='User Session activities';//methodNames[niceNum] + '.' + methodNames[niceNum+1];
 
         var series=[
             {
-                name: 'Count',
+                name: 'User Session',
                 data: []
             },
             {
@@ -46,12 +46,15 @@
                 data: [],
                 visible: false
         }];
-        data.forEach(function(interval){
+        var userlogons = data.activities.userSessions;
+        userlogons.forEach(function(usersession){
+//        data.forEach(function(interval){
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
-            series[0].data.push([interval.startTime,interval.count]);
-            series[1].data.push([interval.startTime,interval.mean]);
-            series[2].data.push([interval.startTime,interval.p95]);
-            series[3].data.push([interval.startTime,interval.max]);
+            //usersession.data.usersessionfunction=null
+            series[0].data.push([usersession.startTime,1]);
+//            series[1].data.push([interval.startTime,interval.mean]);
+//            series[2].data.push([interval.startTime,interval.p95]);
+//            series[3].data.push([interval.startTime,interval.max]);
         });
 
         $('#chart2').highcharts({

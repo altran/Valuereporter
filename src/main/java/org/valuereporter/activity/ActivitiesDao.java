@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -83,7 +84,12 @@ public class ActivitiesDao {
         String sql = "Select * from usersession where starttime > ? and starttime < ?";
         long millisFrom = startPeriod.minusMillis(1).getMillis() ;
         long millisTo = endPeriod.plusMillis(1).getMillis() ;
-        List<ObservedActivity> userSessions = jdbcTemplate.query(sql, new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, new UserSessionMapper());
+        List<ObservedActivity> userSessions = new ArrayList<>();
+        try {
+            userSessions = jdbcTemplate.query(sql, new Object[]{new Timestamp(millisFrom), new Timestamp(millisTo)}, new UserSessionMapper());
+        } catch (BadSqlGrammarException e) {
+            log.info("Failed to query the database for Sql {} Reason: {}", sql, e.getMessage());
+        }
         return userSessions;
     }
 
