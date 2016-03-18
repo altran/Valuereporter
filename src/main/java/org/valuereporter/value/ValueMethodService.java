@@ -68,6 +68,16 @@ public class ValueMethodService implements QueryOperations, WriteOperations{
                 } else {
                     highUsage.addUsageCount(1);
                 }
+            } else if (!doFilter) {
+                long usageCount = usedMethod.getUsageCount();
+                if (usageCount < 1) {
+                    unused.addUsageCount(1);
+                } else if (usageCount < 5) {
+                    lowUsage.addUsageCount(1);
+                } else {
+                    highUsage.addUsageCount(1);
+                }
+
             }
         }
 
