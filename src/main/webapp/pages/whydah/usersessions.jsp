@@ -48,12 +48,7 @@
             {
                 name: 'Removed',
                 data: []
-            },
-            {
-                name: 'N/A',
-                data: [],
-                visible: false
-            },
+            }
         ];
         var userlogons = data.activities.userSessions;
         var userSessionFunction = "";
@@ -73,7 +68,7 @@
                 series[3].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
             if (userSessionFunction == "userSessionRemoved") {
-                series[4].data.push([usersession.startTime, parseInt(usersession.data.applicationid)] % 55);
+                series[4].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
 
 
