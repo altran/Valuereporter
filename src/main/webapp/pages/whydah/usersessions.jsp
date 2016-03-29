@@ -47,8 +47,7 @@
             },
             {
                 name: 'Removed',
-                data: [],
-                visible: false
+                data: []
         }];
         var userlogons = data.activities.userSessions;
         var userSessionFunction = "";
