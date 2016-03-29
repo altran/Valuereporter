@@ -48,7 +48,13 @@
             {
                 name: 'Removed',
                 data: []
-        }];
+            },
+            {
+                name: 'N/A',
+                data: [],
+                visible: false
+            },
+        ];
         var userlogons = data.activities.userSessions;
         var userSessionFunction = "";
         userlogons.forEach(function(usersession) {
