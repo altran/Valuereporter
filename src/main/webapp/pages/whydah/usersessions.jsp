@@ -40,11 +40,12 @@
             {
                 name: 'Access',
                 data: []
-            }, {
+            }, 
             {
                 name: 'Verification',
                 data: []
-            }, {
+            },
+            {
                 name: 'Removed',
                 data: [],
                 visible: false
