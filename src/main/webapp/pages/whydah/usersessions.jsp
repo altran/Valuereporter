@@ -38,11 +38,14 @@
                 data: []
             },
             {
-                name: 'Verification',
-                data: [],
-                visible: false
-            }, {
                 name: 'Access',
+                data: []
+            }, {
+            {
+                name: 'Verification',
+                data: []
+            }, {
+                name: 'Removed',
                 data: [],
                 visible: false
         }];
@@ -63,6 +66,11 @@
             if (userSessionFunction == "userSessionAccess") {
                 series[3].data.push([usersession.startTime, 1]);
             }
+            if (userSessionFunction == "userSessionRemoved") {
+                series[4].data.push([usersession.startTime, 1]);
+            }
+
+
         });
 
 //        message ="hi";
