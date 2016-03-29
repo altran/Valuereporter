@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +52,21 @@ public class WhdyahGuiController {
         model.put("username", "All");
         if (from != null) {
             model.put(FROM, from);
+        } else {
+            model.put(FROM, getDefaultFromTime());
         }
         if (to != null) {
             model.put(TO, to);
         }
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
         return new ModelAndView("whydah/usersessions", "model", model);
+    }
+
+    private long getDefaultFromTime(){
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -14);   // Lets default to the last two weeks
+        Date todate1 = cal.getTime();
+        return todate1.getTime();
     }
 }
