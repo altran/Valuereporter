@@ -59,16 +59,16 @@
             userSessionFunction = usersession.data.usersessionfunction;
             series[0].data.push([usersession.startTime, 1]);
             if (userSessionFunction == "userSessionCreated") {
-                series[1].data.push([usersession.startTime, usersession.applicationid]);
+                series[1].data.push([usersession.startTime, usersession.data.applicationid]);
             }
             if (userSessionFunction == "userSessionVerification") {
-                series[2].data.push([usersession.startTime, usersession.applicationid]);
+                series[2].data.push([usersession.startTime, usersession.data.applicationid]);
             }
             if (userSessionFunction == "userSessionAccess") {
-                series[3].data.push([usersession.startTime, usersession.applicationid]);
+                series[3].data.push([usersession.startTime, usersession.data.applicationid]);
             }
             if (userSessionFunction == "userSessionRemoved") {
-                series[4].data.push([usersession.startTime, usersession.applicationid]);
+                series[4].data.push([usersession.startTime, usersession.data.applicationid]);
             }
 
 
