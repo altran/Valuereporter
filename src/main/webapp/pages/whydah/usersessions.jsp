@@ -103,7 +103,7 @@
                     }
                 },
                 title: {
-                    text: 'Application session distribution',
+                    text: 'Application Session Distribution',
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     }
