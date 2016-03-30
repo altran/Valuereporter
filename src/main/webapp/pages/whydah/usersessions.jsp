@@ -58,7 +58,7 @@
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
             noSession=noSession+1;
             userSessionFunction = usersession.data.usersessionfunction;
-            series[0].data.push([usersession.startTime, noSession]);
+            series[0].data.push([usersession.startTime, noSession % 55 ]);
             if (userSessionFunction == "userSessionCreated") {
                 series[1].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
