@@ -26,7 +26,7 @@
     $.getJSON('/reporter/observe/statistics/${model.prefix}/usersession?startTime=${model.from}&endTime=${model.to}', function(data) {
         <%--var methodNames = '${model.methodName}'.split(".");--%>
 //        var niceNum=methodNames.length-2;
-        var graphTitle='User Session activities';//methodNames[niceNum] + '.' + methodNames[niceNum+1];
+        var graphTitle='User Session Activities';//methodNames[niceNum] + '.' + methodNames[niceNum+1];
 
         var series=[
             {
@@ -34,7 +34,7 @@
                 data: []
             },
             {
-                name: 'Verification',
+                name: 'Created',
                 data: []
             },
             {
@@ -42,7 +42,7 @@
                 data: []
             },
             {
-                name: 'Created',
+                name: 'Verification',
                 data: []
             },
             {
@@ -50,22 +50,22 @@
                 data: []
             }
         ];
-        var userlogons = data.activities.userSessions;
+        var usersessions = data.activities.userSessions;
         var userSessionFunction = "";
         var noSession = 0;
-        userlogons.forEach(function(usersession) {
+        usersessions.forEach(function(usersession) {
 //        data.forEach(function(interval){
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
             noSession=noSession+1;
             userSessionFunction = usersession.data.usersessionfunction;
             series[0].data.push([usersession.startTime, noSession % 55 ]);
-            if (userSessionFunction == "userSessionVerification") {
+            if (userSessionFunction == "userSessionCreated") {
                 series[1].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
             if (userSessionFunction == "userSessionAccess") {
                 series[2].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
-            if (userSessionFunction == "userSessionCreated") {
+            if (userSessionFunction == "userSessionVerification") {
                 series[3].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
             if (userSessionFunction == "userSessionRemoved") {
