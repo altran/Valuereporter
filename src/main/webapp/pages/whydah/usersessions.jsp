@@ -52,12 +52,13 @@
         ];
         var userlogons = data.activities.userSessions;
         var userSessionFunction = "";
+        var noSession = 0;
         userlogons.forEach(function(usersession) {
 //        data.forEach(function(interval){
             //console.log("startTime: " + interval.startTime +", mean : " + interval.mean + ", max: " + interval.max + ", p95: " + interval.p95);
-
+            noSession=noSession+1;
             userSessionFunction = usersession.data.usersessionfunction;
-            series[0].data.push([usersession.startTime, 1]);
+            series[0].data.push([usersession.startTime, noSession]);
             if (userSessionFunction == "userSessionCreated") {
                 series[1].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
