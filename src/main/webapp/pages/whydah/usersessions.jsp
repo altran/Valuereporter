@@ -30,7 +30,7 @@
 
         var series=[
             {
-                name: 'User Session',
+                name: 'User Session Count',
                 data: []
             },
             {
