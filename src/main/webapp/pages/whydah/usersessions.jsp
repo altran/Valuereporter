@@ -102,7 +102,7 @@
                     }
                 },
                 title: {
-                    text: 'Count pr 15 minutes',
+                    text: 'Application session distribution',
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     }
