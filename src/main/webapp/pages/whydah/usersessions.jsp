@@ -34,11 +34,11 @@
                 data: []
             },
             {
-                name: 'Access',
+                name: 'Verification',
                 data: []
             },
             {
-                name: 'Verification',
+                name: 'Access',
                 data: []
             },
             {
@@ -59,14 +59,14 @@
             noSession=noSession+1;
             userSessionFunction = usersession.data.usersessionfunction;
             series[0].data.push([usersession.startTime, noSession % 55 ]);
-            if (userSessionFunction == "userSessionCreated") {
-                series[3].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
-            }
             if (userSessionFunction == "userSessionVerification") {
-                series[2].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
+                series[1].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
             if (userSessionFunction == "userSessionAccess") {
-                series[1].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
+                series[2].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
+            }
+            if (userSessionFunction == "userSessionCreated") {
+                series[3].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
             }
             if (userSessionFunction == "userSessionRemoved") {
                 series[4].data.push([usersession.startTime, parseInt(usersession.data.applicationid) % 55]);
