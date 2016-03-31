@@ -124,13 +124,16 @@
                 },
                 opposite: true
             }],
+            /*
             tooltip: {
                 shared: true,
                 crosshairs: true,
                 xDateFormat: '<b>%m-%d %H:%M</b>'
             },
-            /*
+            */
             tooltip: {
+                shared: true,
+                crosshairs: true,
                 dateTimeLabelFormats: { // don't display the dummy year
                     second:" %d/%m %H:%M:%S",
                     minute:" %d/%m %H:%M",
@@ -141,7 +144,6 @@
                 },
                 followPointer: true
             },
-            */
             series: series
         });
 
