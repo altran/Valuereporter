@@ -35,6 +35,7 @@ public class WhdyahGuiController {
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
         model.put("username", "All");
+        model.put(FROM, getDefaultFromTime());
         log.trace("Input prefix {}, methodName {}", prefix,methodName);
         return new ModelAndView("whydah/userlogon", "model", model);
     }
