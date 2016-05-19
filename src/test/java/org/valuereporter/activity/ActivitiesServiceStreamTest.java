@@ -6,6 +6,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +18,7 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -22,14 +27,21 @@ import static org.testng.AssertJUnit.assertTrue;
 public class ActivitiesServiceStreamTest {
     private static final Logger log = getLogger(ActivitiesServiceStreamTest.class);
     private ObjectMapper mapper;
+    List<UserSessionObservedActivity> observedActivities;
+    String byPassword = "userSessionCreatedByPassword";
+    String byPin = "userSessionCreatedByPin";
+    String appToken1 = "appToken1";
+    String appToken2 = "appToken2";
 
     @BeforeClass
     public void beforeClass() throws Exception{
         mapper = new ObjectMapper();
+
     }
 
     @BeforeMethod
     public void setUp() throws Exception {
+        observedActivities = new ArrayList<>();
 
     }
 
@@ -57,11 +69,6 @@ public class ActivitiesServiceStreamTest {
 
     @Test
     public void testUserSessionActivities() throws Exception{
-        List<UserSessionObservedActivity> observedActivities = new ArrayList<>();
-        String byPassword = "userSessionCreatedByPassword";
-        String byPin = "userSessionCreatedByPin";
-        String appToken1 = "appToken1";
-        String appToken2 = "appToken2";
         UserSessionObservedActivity user1 = new UserSessionObservedActivity("user1", byPassword, appToken1);
         assertEquals(UserSessionObservedActivity.USER_SESSION_ACTIVITY, user1.getName());
         observedActivities.add(user1);
@@ -75,6 +82,34 @@ public class ActivitiesServiceStreamTest {
         assertEquals(observedActivities.size(),3);
         assertEquals(counted.get(UserSessionObservedActivity.USER_SESSION_ACTIVITY).longValue(),3);
         assertEquals(counted.size(),1);
+
+        Map<String, Long> byActivity = observedActivities.stream().collect(groupingBy(UserSessionObservedActivity::getUserSessionFunction, counting()));
+
+        assertEquals(byActivity.get(byPassword).longValue(),2);
+        assertEquals(byActivity.size(),2);
+    }
+
+    @Test
+    public void testDatedUserSessionActivities() throws Exception{
+
+        Instant yesterday = Instant.now().minus(1, ChronoUnit.DAYS);
+        ZonedDateTime localYesterday = ZonedDateTime.ofInstant(yesterday, ZoneId.systemDefault());
+        long yesterdayMillis = yesterday.toEpochMilli();
+        long yesterdayAbitEarlierMillis = yesterday.minus(10, ChronoUnit.SECONDS).toEpochMilli();
+        observedActivities.add(new UserSessionObservedActivity("user1", byPassword, appToken1, yesterdayMillis));
+        observedActivities.add(new UserSessionObservedActivity("user1", byPassword, appToken2));
+        observedActivities.add(new UserSessionObservedActivity("user1", byPin, appToken1,yesterdayAbitEarlierMillis));
+        String json = this.mapper.writeValueAsString(observedActivities);
+        assertTrue(json.contains(Long.toString(yesterdayMillis)));
+        log.debug("Activities json {}", json);
+
+        Map<Integer, Long> byDayOfMonth = observedActivities.stream().collect(groupingBy(UserSessionObservedActivity::getActivityDate, counting()));
+
+        Long countActivitiesYesterday = byDayOfMonth.get(localYesterday.getDayOfMonth());
+        assertNotNull(countActivitiesYesterday);
+        assertEquals(countActivitiesYesterday.longValue(),2);
+        int daysOfActivities = byDayOfMonth.size();
+        assertEquals(daysOfActivities,2);
     }
 
     private ObservedActivity buildStubedActivity(String activity) {
@@ -90,13 +125,35 @@ public class ActivitiesServiceStreamTest {
         public static final String USER_SESSION_ACTIVITY = "userSession";
         private static final String USER_SESSION_ACTIVITY_DB_KEY = "userid";
 
-        public UserSessionObservedActivity(String userid,String userSessionActivity,String applicationtokenid) {
-            super(USER_SESSION_ACTIVITY, System.currentTimeMillis());
+        public UserSessionObservedActivity(String name, long time) {
+            super(name, time);
+        }
+
+        public UserSessionObservedActivity(String userid, String userSessionActivity, String applicationtokenid) {
+            this(userid, userSessionActivity,applicationtokenid,System.currentTimeMillis());
+
+        }
+
+        public UserSessionObservedActivity(String userid, String userSessionActivity, String applicationtokenid, long timestamp) {
+            this(USER_SESSION_ACTIVITY, timestamp);
             String applicationid = "app" + applicationtokenid;
             put("userid", userid);
             put("usersessionfunction", userSessionActivity);
             put("applicationtokenid", applicationtokenid);
             put("applicationid", applicationid);
         }
+
+        public String getUserSessionFunction(){
+            return (String) getData().get("usersessionfunction");
+        }
+
+        public int getActivityDate(){
+
+            Instant startTime = Instant.ofEpochMilli(getStartTime());
+            ZonedDateTime localStartTime = ZonedDateTime.ofInstant(startTime, ZoneId.systemDefault());
+            return localStartTime.getDayOfMonth();
+        }
     }
+
+
 }
