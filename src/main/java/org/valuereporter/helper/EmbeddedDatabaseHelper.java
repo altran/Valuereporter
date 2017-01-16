@@ -32,6 +32,7 @@ public class EmbeddedDatabaseHelper {
     private static final String JDBC_ADMIN_PASSWORD_KEY = "admin.connection.password";
     private static final String DEFAULT_JDBC_DRIVER = "net.sourceforge.jtds.jdbc.Driver";
     private static final String JDBC_DRIVER_NAME_KEY = "jdbc.driverClassName";
+    private static final String SETUP_NEW_DATABASE = "jdbc.setupNewDb";
     private final QueryRunner queryRunner;
     private final String jdbcDriverClassName;
     private final String jdbcUrl;
@@ -39,12 +40,14 @@ public class EmbeddedDatabaseHelper {
     private final String jdbcPassword;
     private final String jdbcAdminPassword;
     private boolean useEmbeddedDb = true;
+    private boolean setupNewDatabase = true;
     private String jdbcAdminUserName;
 
 
     public EmbeddedDatabaseHelper(Properties resources) throws ClassNotFoundException {
         queryRunner = new QueryRunner();
         useEmbeddedDb = useEmbeddedDb(resources);
+        setupNewDatabase = doSetupNewDatabase(resources);
         log.info("Using embedded database {}", useEmbeddedDb);
         this.jdbcDriverClassName = resources.getProperty(JDBC_DRIVER_NAME_KEY, DEFAULT_JDBC_DRIVER);
         this.jdbcUrl = resources.getProperty(JDBC_URL_KEY, DEFAULT_JDBC_URL);
@@ -61,6 +64,8 @@ public class EmbeddedDatabaseHelper {
         }
 
     }
+
+
 
     public void initializeDatabase() {
         if (useEmbeddedDb && isHSQLdbAvailable()) {
@@ -79,9 +84,11 @@ public class EmbeddedDatabaseHelper {
             } catch (SQLException e) {
                 throw  new ValuereporterTechnicalException("Failed to open database at URL " + jdbcUrl, e,StatusType.connection_error);
             }
-            createUsers(connection);
-            createTables(connection);
-            insertValues(connection);
+            if (setupNewDatabase) {
+                createUsers(connection);
+                createTables(connection);
+                insertValues(connection);
+            }
 
         }
 
@@ -94,6 +101,15 @@ public class EmbeddedDatabaseHelper {
             useEmbedded =  false;
         }
         return useEmbedded;
+    }
+
+    public static boolean doSetupNewDatabase(Properties resources) {
+        boolean setupNewDb = false;
+        String setupNewDbValue = resources.getProperty(SETUP_NEW_DATABASE);
+        if (setupNewDbValue != null && setupNewDbValue.equalsIgnoreCase("true")) {
+            setupNewDb =  true;
+        }
+        return setupNewDb;
     }
 
     public Connection connectToHsqldb() {
