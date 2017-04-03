@@ -20,7 +20,7 @@ public class ActivitiesDaoTest {
 
     @Test
     public void testBuildSql() throws Exception {
-        ActivitiesDao activitiesDao = new ActivitiesDao(null);
+        ActivitiesDao activitiesDao = new ActivitiesDao(null,null);
         List<String> activities = new ArrayList<>();
         activities.add("userId");
         activities.add("applicationId");
