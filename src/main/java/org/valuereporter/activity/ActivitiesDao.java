@@ -27,10 +27,12 @@ public class ActivitiesDao {
     public static final String START_TIME_COLUMN = "starttime";
 
     private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcAdminTemplate;
 
     @Autowired
-    public ActivitiesDao(JdbcTemplate jdbcTemplate) {
+    public ActivitiesDao(JdbcTemplate jdbcTemplate, JdbcTemplate jdbcAdminTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcAdminTemplate = jdbcAdminTemplate;
     }
 
     protected long insertActivities(String tableName, final List<String> columnNames, final List<ObservedActivity> activities) {
@@ -141,6 +143,6 @@ public class ActivitiesDao {
                     "      applicationid varchar(255)  NOT NULL,\n" +
                     "    );";
         }
-        jdbcTemplate.execute(tableSql);
+        jdbcAdminTemplate.execute(tableSql);
     }
 }
