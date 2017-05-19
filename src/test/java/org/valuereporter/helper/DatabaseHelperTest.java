@@ -7,7 +7,7 @@ import java.util.Properties;
  */
 public class DatabaseHelperTest {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         EmbeddedDatabaseHelper databaseHelper = new EmbeddedDatabaseHelper(new Properties());
         databaseHelper.initializeDatabase();
     }

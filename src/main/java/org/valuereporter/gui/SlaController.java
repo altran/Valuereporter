@@ -10,8 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.valuereporter.utils.XSSFilter.hasXssRisk;
-
 /**
  * @author <a href="bard.lind@gmail.com">Bard Lind</a>
  */
@@ -26,9 +24,6 @@ public class SlaController {
 
     @RequestMapping("/sla")
     public ModelAndView showSlaGraph(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
-        if (hasXssRisk(prefix) || hasXssRisk(methodName)) {
-            throw new IllegalInputException();
-        }
         Map model = new HashMap<String,String>();
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
@@ -37,9 +32,6 @@ public class SlaController {
     }
     @RequestMapping("/slahc")
     public ModelAndView showSlaGraphHighChart(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName) {
-        if (hasXssRisk(prefix) || hasXssRisk(methodName)) {
-            throw new IllegalInputException();
-        }
         Map model = new HashMap<String,String>();
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);
@@ -50,9 +42,6 @@ public class SlaController {
     @RequestMapping("/slainterval")
     public ModelAndView showSlaGraphInterval(@RequestParam(value = PREFIX, required = true) String prefix, @RequestParam(value = METHOD_NAME, required = true) String methodName,
                                              @RequestParam(value = FROM, required = false) Long from, @RequestParam(value = TO, required = false) String to) {
-        if (hasXssRisk(prefix) || hasXssRisk(methodName)) {
-            throw new IllegalInputException();
-        }
         Map model = new HashMap<String,String>();
         model.put(PREFIX, prefix);
         model.put(METHOD_NAME, methodName);

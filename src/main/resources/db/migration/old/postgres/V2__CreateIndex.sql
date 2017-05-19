@@ -1,1 +1,0 @@
-create index methodName on ObservedMethod (methodName)
