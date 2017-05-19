@@ -27,7 +27,7 @@ public class ImplementedMethodDao {
     }
 
     public List<ImplementedMethod> findImplementedMethodsByPrefix(String prefix) {
-        String sql = "SELECT prefix,methodName FROM ImplementedMethod WHERE prefix = ? ORDER BY methodName ASC ";
+        String sql = "SELECT prefix,methodName FROM ImplementedMethod WHERE prefix = ? ORDER BY methodName DESC ";
         Object[] parameters = new Object[] {prefix};
         List<ImplementedMethod> implementedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ImplementedMethod>() {
             @Override
@@ -43,7 +43,7 @@ public class ImplementedMethodDao {
         return implementedMethods;
     }
     public List<ImplementedMethod> findImplementedMethods(String prefix, String name) {
-        String sql = "SELECT prefix,methodName FROM ImplementedMethod WHERE prefix = ? AND methodName = ? ORDER BY methodName ASC ";
+        String sql = "SELECT prefix,methodName FROM ImplementedMethod WHERE prefix = ? AND methodName = ? ORDER BY methodName DESC ";
         Object[] parameters = new Object[] {prefix,name};
         List<ImplementedMethod> implementedMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ImplementedMethod>() {
             @Override
@@ -79,12 +79,5 @@ public class ImplementedMethodDao {
             }
         }
         return inserted;
-    }
-
-    public List<String> findImplementedPrefixes() {
-        String sql = "SELECT DISTINCT prefix FROM ImplementedMethod ORDER BY prefix ASC ;";
-        List<String> implementedMethods = jdbcTemplate.queryForList(sql, String.class);
-        return implementedMethods;
-
     }
 }
