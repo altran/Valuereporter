@@ -30,7 +30,7 @@ public class SlaDao {
     }
 
     public List<UsageStatistics> findUsage(String prefix, String methodFilter, DateTime start, DateTime end) {
-        String sql = "select ok.prefix, ok.methodName, oi.duration,oi.startTime, oi.count, oi.max, oi.min, oi.mean, oi.median, oi.stdDev, oi.p95, oi.p98, oi.p99  \n" +
+        String sql = "select ok.prefix, ok.methodName, oi.duration,oi.startTime, oi.vrCount, oi.vrMax, oi.vrMin, oi.vrMean, oi.vrMedian, oi.stdDev, oi.p95, oi.p98, oi.p99  \n" +
                 "   from ObservedInterval oi, ObservedKeys ok \n" +
                 "   where oi.startTime >= ? and oi.startTime <= ? and ok.prefix= ? and ok.methodName= ? and ok.id = oi.observedKeysId \n" +
                 "   order by oi.startTime asc";
@@ -75,7 +75,7 @@ public class SlaDao {
     }
 
     public List<SlaStatistics> findSlaStatistics(String prefix, String methodName, DateTime start, DateTime end){
-        String sql = "select  oi.startTime,oi.duration, oi.count, oi.max, oi.min, oi.mean, oi.p95  \n" +
+        String sql = "select  oi.startTime,oi.duration, oi.vrCount, oi.vrMax, oi.vrMin, oi.vrMean, oi.p95  \n" +
                 "   from ObservedInterval oi, ObservedKeys ok \n" +
                 "   where oi.startTime >= ? and oi.startTime <= ? and ok.prefix= ? and ok.methodName= ? and ok.id = oi.observedKeysId \n" +
                 "   order by oi.startTime desc";

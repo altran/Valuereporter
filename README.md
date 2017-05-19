@@ -37,7 +37,7 @@ Running Valuereporter
 ===================
 
 ```
-java -jar target/valuereporter-0.1-SNAPSHOT-with-deps.jar
+java -jar target/valuereporter-0.5.1-with-deps.jar
 ```
 
 Database

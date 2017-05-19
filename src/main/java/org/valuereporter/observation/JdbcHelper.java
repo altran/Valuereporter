@@ -21,7 +21,7 @@ public class JdbcHelper {
         double p95 = (Double)values[7]; //convertDuration(snapshot.get95thPercentile()),
         double p98 = (Double)values[8]; //convertDuration(snapshot.get98thPercentile()),
         double p99 = (Double)values[9]; //convertDuration(snapshot.get99thPercentile()),
-        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
+        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, vrCount, vrMax, vrMin, vrMean, vrMedian, stdDev, p95, p98, p99)\n" +
                 "  select o.id, '" + sqlDate + "', "+duration +","+ count +"," + max +"," +min + "," + mean + "," + median + "," + standardDeviation +
                 "," + p95+"," + p98+"," + p99+ "\n" +
                 "  from ObservedKeys o\n" +

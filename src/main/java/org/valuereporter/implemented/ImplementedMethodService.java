@@ -40,4 +40,9 @@ public class ImplementedMethodService implements QueryOperations, WriteOperation
         }
         return size;
     }
+
+    @Override
+    public List<String> findImplementedPrefixes() {
+        return implementedMethodDao.findImplementedPrefixes();
+    }
 }

@@ -28,14 +28,18 @@ public class ValueDao {
     public List<ValuableMethod> findUsageByMethod(String prefix) {
 
         String sql = "SELECT methodName, COUNT(*) FROM ObservedMethod WHERE prefix = ? GROUP BY methodName";
+        sql = "SELECT ok.PREFIX, ok.METHODNAME, count(oi.VRCOUNT) FROM OBSERVEDINTERVAL oi, OBSERVEDKEYS ok " +
+                "WHERE oi.OBSERVEDKEYSID = ok.ID AND ok.PREFIX = ? " +
+                "GROUP BY ok.ID;";
         Object[] parameters = new Object[] {prefix};
         List<ValuableMethod> valuableMethods = jdbcTemplate.query(sql, parameters, new RowMapper<ValuableMethod>() {
             @Override
             public ValuableMethod mapRow(ResultSet resultSet, int i) throws SQLException {
 
                 ValuableMethod observedMethod = new ValuableMethod(
-                        resultSet.getString(1),
-                        resultSet.getLong(2));
+                        resultSet.getString(2),
+                        resultSet.getLong(3));
+                observedMethod.setPrefix(resultSet.getString(1));
                 return observedMethod;
             }
         });

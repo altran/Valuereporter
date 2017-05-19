@@ -5,11 +5,14 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.valuereporter.ValuereporterException;
+import org.valuereporter.helper.StatusType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,31 +121,38 @@ public class ObservationDao {
     }
 
     public void addAll(final String prefix, final List<ObservedMethod> observedMethods) {
-        String sql = "INSERT INTO "
-                + "ObservedMethod "
-                + "(prefix,methodName, startTime, endTime, duration) "
-                + "VALUES " + "(?,?,?,?,?)";
+        if (observedMethods != null && observedMethods.size() > 0) {
+            try {
+                String sql = "INSERT INTO "
+                        + "ObservedMethod "
+                        + "(prefix,methodName, startTime, endTime, duration) "
+                        + "VALUES " + "(?,?,?,?,?)";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
-            @Override
-            public void setValues(PreparedStatement ps, int i)
-                    throws SQLException {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i)
+                            throws SQLException {
 
-                ObservedMethod observedMethod = observedMethods.get(i);
-                ps.setString(1,prefix);
-                ps.setString(2, observedMethod.getName());
-                ps.setTimestamp(3, new Timestamp(observedMethod.getStartTime()));
-                ps.setTimestamp(4, new Timestamp(observedMethod.getEndTime()));
-                ps.setLong(5, observedMethod.getDuration());
+                        ObservedMethod observedMethod = observedMethods.get(i);
+                        ps.setString(1, prefix);
+                        ps.setString(2, observedMethod.getName());
+                        ps.setTimestamp(3, new Timestamp(observedMethod.getStartTime()));
+                        ps.setTimestamp(4, new Timestamp(observedMethod.getEndTime()));
+                        ps.setLong(5, observedMethod.getDuration());
 
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return observedMethods.size();
+                    }
+                });
+            } catch (DataAccessException dae) {
+                log.warn("Failed to update via batch. Batch size {}, reason {}",observedMethods.size(),dae.getMessage());
+                throw new ValuereporterException("Failed to update via batch. Batch size " + observedMethods.size() +". Reason: " + dae.getMessage(), dae,StatusType.data_error);
             }
-
-            @Override
-            public int getBatchSize() {
-                return observedMethods.size();
-            }
-        });
+        }
 
 
     }
@@ -150,7 +160,7 @@ public class ObservationDao {
     public synchronized int updateStatistics(final String prefix, final List<ObservedInterval> intervals) {
         log.trace("Calling update statistics. prefix {}, intervals count {}", prefix, intervals.size());
 
-        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, count, max, min, mean, median, stdDev, p95, p98, p99)\n" +
+        String sql = "insert into ObservedInterval (observedKeysId, startTime, duration, vrCount, vrMax, vrMin, vrMean, vrMedian, stdDev, p95, p98, p99)\n" +
                 "select o.id," +
                 "?, ?,?,?,?,?,?,?,?,?,? " +
                 "  from ObservedKeys o\n" +

@@ -7,4 +7,6 @@ import java.util.List;
  */
 public interface QueryOperations {
     List<ImplementedMethod> findImplementedMethods(String prefix, String name);
+
+    List<String> findImplementedPrefixes();
 }
